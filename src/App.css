@@ -1,0 +1,150 @@
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+}
+
+ul, ol, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  grid-template-columns: repeat(24, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+}
+
+
+.skeleton {
+  max-width: 600px;
+  width: 80%;
+  height: 200px;
+  background: #fff;
+  display: flex;
+  flex-flow: column;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  position: relative;
+}
+
+.skeleton-header {
+  display: grid;
+  grid-template-areas:
+    "a a b b b b"
+    "a a c c c c";
+}
+
+.skeleton-body {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.circle, .skeleton-bar {
+  background: #dfdfdf;
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton-circle {
+  grid-area: a;
+  gap: 1rem;
+}
+
+.skeleton-bar-h1 {
+  grid-area: b;
+}
+
+.skeleton-bar-h2 {
+  grid-area: c;
+}
+
+.skeleton-bar {
+  width: 100%;
+  border-radius: 100rem;
+  height: 16px;
+}
+
+.circle {
+  border-radius: 100rem;
+  height: 100px;
+  width: 100px;
+}
+
+.gradient {
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: #ccc;
+  position: absolute;
+  animation-name: gradientAnimation;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  opacity: .5;
+}
+
+@keyframes gradientAnimation{
+  0%{
+    transform: translate(-30%)
+  }
+  100%{
+    transform: translate(333% )
+  }
+}
+
+
+.memori {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  width: 500px;
+  height: 500px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+li, li > div {
+  background: pink;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 30px;
+}
+
+li:hover {
+  opacity: 0.9;
+}
+
+.flipped {
+  background: bisque;
+}
