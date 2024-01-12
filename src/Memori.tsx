@@ -30,6 +30,8 @@ export default function Memori({ symbols }: { symbols: string[] }) {
   const [memoryItems, setMemoryItems] = useState<MemoriItemType[]>(init);
 
   const handleClicked = (memoryItem: MemoriItemType) => {
+    console.log(memoryItems);
+
     const memoryItemSelected = memoryItems.find(
       (itm) => itm.id === memoryItem.id,
     ) as MemoriItemType;
@@ -98,7 +100,7 @@ export default function Memori({ symbols }: { symbols: string[] }) {
       {memoryItems.map((memoryItem, i) => {
         if (memoryItem.state === "hidden") {
           return (
-            <li key={memoryItem.id}>
+            <li className="masked" key={memoryItem.id}>
               <MemoriItem
                 symbol={memoryItem.symbol}
                 onClick={() => {

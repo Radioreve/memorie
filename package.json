@@ -11,13 +11,17 @@
   },
   "dependencies": {
     "@testing-library/react": "^14.1.2",
+    "cypress": "^13.6.2",
     "lodash": "^4.17.21",
+    "playwright": "^1.40.1",
     "prettier": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vitest": "^1.0.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.11.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
