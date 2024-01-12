@@ -3,7 +3,7 @@ import _ from "lodash";
 
 type MemoriItemType = {
   id: number;
-  symbol: any;
+  symbol: string;
   state: "hidden" | "flipped" | "found";
 };
 
@@ -22,7 +22,7 @@ export default function Memori({ symbols }: { symbols: string[] }) {
     .map((s): Omit<MemoriItemType, "id"> => ({ state: "hidden", symbol: s }))
     .flatMap((s) => [s, s])
     .map((s, i) => ({ ...s, id: i }))
-    .shuffle()
+    .sortBy(() => Math.random() > 0.5)
     .value();
 
   console.log(init);

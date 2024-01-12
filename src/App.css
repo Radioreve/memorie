@@ -121,7 +121,6 @@ ul, ol, li {
 .memori {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
   width: 500px;
   height: 500px;
   justify-content: center;
