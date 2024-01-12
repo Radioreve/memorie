@@ -95,12 +95,12 @@ export default function Memori({ symbols }: { symbols: string[] }) {
 
   return (
     <ul className="memori">
-      {memoryItems.map((memoryItem, i) => {
+      {memoryItems.map((memoryItem: MemoriItemType) => {
         if (memoryItem.state === "hidden") {
           return (
             <li key={memoryItem.id}>
               <MemoriItem
-                symbol={memoryItem.symbol}
+                symbol={Number(memoryItem.symbol)}
                 onClick={() => {
                   handleClicked(memoryItem);
                 }}
