@@ -8,24 +8,32 @@ type MemoriItemType = {
 };
 
 interface MemoriItemProps {
-  symbol: number;
-  onClick: (number: number) => void;
+  symbol: string;
+  onClick: (string: string) => void;
 }
 
 const MemoriItem: FunctionComponent<MemoriItemProps> = ({
   symbol,
   onClick,
-}) => <div onClick={() => onClick(symbol)}></div>;
+}) => (
+  <div onClick={() => onClick(symbol)}>
+    <span></span>
+  </div>
+);
 
-export default function Memori({ symbols }: { symbols: string[] }) {
-  const init = _(symbols)
+type MemoriProps = {
+  symbols: string[];
+  sort: (s: MemoriItemType[]) => MemoriItemType[];
+};
+
+export default function Memori({ symbols, sort }: MemoriProps) {
+  const unsortedInit = _(symbols)
     .map((s): Omit<MemoriItemType, "id"> => ({ state: "hidden", symbol: s }))
     .flatMap((s) => [s, s])
     .map((s, i) => ({ ...s, id: i }))
-    .sortBy(() => Math.random() > 0.5)
     .value();
 
-  console.log(init);
+  const init = sort(unsortedInit);
 
   const [memoryItems, setMemoryItems] = useState<MemoriItemType[]>(init);
 
@@ -98,7 +106,7 @@ export default function Memori({ symbols }: { symbols: string[] }) {
       {memoryItems.map((memoryItem, i) => {
         if (memoryItem.state === "hidden") {
           return (
-            <li key={memoryItem.id}>
+            <li className="masked" key={memoryItem.id}>
               <MemoriItem
                 symbol={memoryItem.symbol}
                 onClick={() => {
@@ -111,7 +119,7 @@ export default function Memori({ symbols }: { symbols: string[] }) {
         if (memoryItem.state === "flipped" || memoryItem.state === "found") {
           return (
             <li className="flipped" key={memoryItem.id}>
-              {memoryItem.symbol}
+              <span>{memoryItem.symbol}</span>
             </li>
           );
         }
