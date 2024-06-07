@@ -113,7 +113,11 @@ export default function Memori({
       {memoryItems.map((memoryItem, i) => {
         if (memoryItem.state === "hidden") {
           return (
-            <li className="masked" key={memoryItem.id}>
+            <li
+              className="masked"
+              data-testid={"item-masked-" + i}
+              key={memoryItem.id}
+            >
               <MemoriItem
                 symbol={memoryItem.symbol}
                 onClick={() => {
@@ -125,7 +129,11 @@ export default function Memori({
         }
         if (memoryItem.state === "flipped" || memoryItem.state === "found") {
           return (
-            <li className="flipped" key={memoryItem.id}>
+            <li
+              className="flipped"
+              key={memoryItem.id}
+              data-testid={"item-flipped-" + i}
+            >
               <span>{memoryItem.symbol}</span>
             </li>
           );
