@@ -1,10 +1,11 @@
 import { FunctionComponent, useState } from "react";
 import _ from "lodash";
 
-type MemoriItemType = {
+type MemoryItemState = "hidden" | "flipped" | "found";
+type MemoriItem = {
   id: number;
   symbol: string;
-  state: "hidden" | "flipped" | "found";
+  state: MemoryItemState;
 };
 
 interface MemoriItemProps {
@@ -22,63 +23,61 @@ const MemoriItem: FunctionComponent<MemoriItemProps> = ({
 );
 
 type MemoriProps = {
-  symbols: string[];
-  sort: (s: MemoriItemType[]) => MemoriItemType[];
+  symbols?: string[];
+  sort?: (s: MemoriItem[]) => MemoriItem[];
 };
 
-export default function Memori({ symbols, sort }: MemoriProps) {
+const findById = (items: MemoriItem[], memoryItemId: number) =>
+  items.find((itm) => itm.id == memoryItemId) as MemoriItem;
+
+const updateItemStateById = (
+  items: MemoriItem[],
+  memoryItemId: number,
+  newState: MemoryItemState,
+) => {
+  const memoryItemSelected = findById(items, memoryItemId);
+  memoryItemSelected.state = newState;
+  const index = _.findIndex(items, (itm) => itm.id === memoryItemId);
+  memoryItemId[index] = memoryItemSelected;
+};
+
+export default function Memori({
+  symbols = ["💅", "🥺", "🔥", "✨", "💣", "👏", "🍰", "😇"],
+  sort = (arr) => arr.sort(() => Math.random() - 0.5),
+}: MemoriProps) {
   const unsortedInit = _(symbols)
-    .map((s): Omit<MemoriItemType, "id"> => ({ state: "hidden", symbol: s }))
+    .map((s): Omit<MemoriItem, "id"> => ({ state: "hidden", symbol: s }))
     .flatMap((s) => [s, s])
     .map((s, i) => ({ ...s, id: i }))
     .value();
 
   const init = sort(unsortedInit);
 
-  const [memoryItems, setMemoryItems] = useState<MemoriItemType[]>(init);
+  const [memoryItems, setMemoryItems] = useState<MemoriItem[]>(init);
 
-  const handleClicked = (memoryItem: MemoriItemType) => {
-    const memoryItemSelected = memoryItems.find(
-      (itm) => itm.id === memoryItem.id,
-    ) as MemoriItemType;
+  const handleClicked = (memoryItem: MemoriItem) => {
+    const memoryItemSelected = findById(memoryItems, memoryItem.id);
 
     if (memoryItemSelected.state !== "hidden") {
       return console.log("Already flipped or found, doing nothing...");
     }
-
     const updatedMemoryItems = [...memoryItems];
-    memoryItemSelected.state = "flipped";
-    const index = _.findIndex(memoryItems, (itm) => itm.id === memoryItem.id);
-    updatedMemoryItems[index] = memoryItemSelected;
+    updateItemStateById(memoryItems, memoryItem.id, "flipped");
 
-    const flippedItems = updatedMemoryItems.filter(
-      (itm) => itm.state === "flipped",
-    );
+    const flippedItems = _.filter(updatedMemoryItems, { state: "flipped " });
 
     if (flippedItems.length === 1) {
       console.log("Flipped one item, waiting for second one...");
       return setMemoryItems(updatedMemoryItems);
     }
 
-    setMemoryItems(updatedMemoryItems);
-
-    if (
+    const flippedCardsIdentical =
       flippedItems.length === 2 &&
-      flippedItems[0].symbol === flippedItems[1].symbol
-    ) {
-      flippedItems[0].state = "found";
-      const index1 = _.findIndex(
-        memoryItems,
-        (itm) => itm.id === flippedItems[0].id,
-      );
-      updatedMemoryItems[index1] = flippedItems[0];
-      flippedItems[1].state = "found";
-      const index2 = _.findIndex(
-        memoryItems,
-        (itm) => itm.id === flippedItems[1].id,
-      );
-      updatedMemoryItems[index2] = flippedItems[1];
-      console.log("Found a match!");
+      flippedItems[0].symbol === flippedItems[1].symbol;
+
+    if (flippedCardsIdentical) {
+      updateItemStateById(memoryItems, flippedItems[0].id, "found");
+      updateItemStateById(memoryItems, flippedItems[1].id, "found");
       return setMemoryItems(updatedMemoryItems);
     }
 
