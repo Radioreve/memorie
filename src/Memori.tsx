@@ -38,7 +38,7 @@ const updateItemStateById = (
   const memoryItemSelected = findById(items, memoryItemId);
   memoryItemSelected.state = newState;
   const index = _.findIndex(items, (itm) => itm.id === memoryItemId);
-  memoryItemId[index] = memoryItemSelected;
+  items[index] = memoryItemSelected;
 };
 
 export default function Memori({
@@ -58,13 +58,19 @@ export default function Memori({
   const handleClicked = (memoryItem: MemoriItem) => {
     const memoryItemSelected = findById(memoryItems, memoryItem.id);
 
+    if (_.filter(memoryItems, { state: "flipped" }).length === 2) {
+      return console.log("Wait a little bit...");
+    }
+
     if (memoryItemSelected.state !== "hidden") {
       return console.log("Already flipped or found, doing nothing...");
     }
     const updatedMemoryItems = [...memoryItems];
     updateItemStateById(memoryItems, memoryItem.id, "flipped");
 
-    const flippedItems = _.filter(updatedMemoryItems, { state: "flipped " });
+    const flippedItems = _.filter<MemoriItem>(updatedMemoryItems, {
+      state: "flipped",
+    });
 
     if (flippedItems.length === 1) {
       console.log("Flipped one item, waiting for second one...");
@@ -80,6 +86,8 @@ export default function Memori({
       updateItemStateById(memoryItems, flippedItems[1].id, "found");
       return setMemoryItems(updatedMemoryItems);
     }
+
+    setMemoryItems(updatedMemoryItems);
 
     setTimeout(() => {
       console.log("Flipping back the two...");
